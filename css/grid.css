@@ -45,7 +45,7 @@
 }
 
 .dial-tile.drag-over .dial-icon {
-  outline: 2px dashed var(--accent-magenta);
+  outline: 2px dashed CanvasText;
   outline-offset: 3px;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .dial-tile.add-tile .add-icon {
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, CanvasText 4%, transparent);
   border: 1px dashed var(--border);
   font-size: 1.4rem;
   font-weight: 300;
@@ -72,8 +72,8 @@
   width: clamp(40px, calc(1000px / var(--grid-columns) - 38px), 60px);
   height: clamp(40px, calc(1000px / var(--grid-columns) - 38px), 60px);
   border-radius: 5px;
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  background: color-mix(in srgb, CanvasText 7%, transparent);
+  box-shadow: 0 6px 16px color-mix(in srgb, CanvasText 30%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,3 +126,4 @@
     grid-template-columns: repeat(3, 1fr) !important;
   }
 }
+
