@@ -1,40 +1,27 @@
 :root {
-  /* Neutral palette — defaults to dark, overridden below for light mode */
-  --panel: rgba(30, 30, 32, 0.55);
-  --panel-soft: rgba(30, 30, 32, 0.32);
-  --border: rgba(255, 255, 255, 0.10);
-  --text-primary: #ECECEC;
-  --text-muted: #9b9b9f;
-  --accent: #8a8a92;
+  /* System color tokens — these reflect the active browser/OS theme */
+  --bg: Canvas;
+  --text-primary: CanvasText;
+  --text-muted: GrayText;
+  --panel: color-mix(in srgb, Canvas 85%, CanvasText 15%);
+  --panel-soft: color-mix(in srgb, Canvas 92%, CanvasText 8%);
+  --border: color-mix(in srgb, CanvasText 12%, transparent);
+  --accent: AccentColor;
   --danger: #d97373;
 
-  /* Type */
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
   --font-body: "Inter", "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Layout */
   --grid-columns: 6;
   --gap: 1.4vw;
   --radius: 4px;
-  --blur: 20px;
-}
+  --blur: 12px;
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --panel: rgba(255, 255, 255, 0.55);
-    --panel-soft: rgba(255, 255, 255, 0.35);
-    --border: rgba(0, 0, 0, 0.10);
-    --text-primary: #1c1c1e;
-    --text-muted: #6b6b70;
-    --accent: #4a4a50;
-  }
-  body {
-    background: #ffffff;
-  }
-  #background-canvas {
-    background: #ffffff;
-  }
+  --space-xs: 0.3rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.9rem;
+  --space-lg: 1.4rem;
 }
 
 * {
@@ -44,21 +31,15 @@
 }
 
 html, body {
-  height: 100%;
+  min-height: 100%;
   width: 100%;
+  background: Canvas;
+  color: CanvasText;
+  color-scheme: light dark;
 }
 
 body {
   font-family: var(--font-body);
-  color: var(--text-primary);
-  background: #202124;
-}
-
-#background-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: #202124;
 }
 
 #board {
@@ -68,8 +49,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8vh 2.5vw 6vh;
-  gap: 3.2vh;
+  padding: 6vh 2.5vw 6vh;
+  gap: 1.6vh;
 }
 
 .hidden {
@@ -77,20 +58,20 @@ body {
 }
 
 ::selection {
-  background: var(--accent-cyan);
-  color: #0a0b0e;
+  background: AccentColor;
+  color: AccentColorText;
 }
 
 input {
   font-family: var(--font-body);
-  color: var(--text-primary);
+  color: CanvasText;
   background: transparent;
   border: none;
   outline: none;
 }
 
 input::placeholder {
-  color: var(--text-muted);
+  color: GrayText;
 }
 
 a {
@@ -107,6 +88,7 @@ h3 {
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: GrayText;
   margin-bottom: 0.6rem;
 }
+
