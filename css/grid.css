@@ -1,0 +1,128 @@
+#grid-canvas {
+  max-width: min(1100px, 94vw);
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), max-content);
+  grid-auto-rows: min-content;
+  justify-content: center;
+  gap: 4.5vh 2.4rem;
+  align-content: start;
+  padding: 1vh 0.5vw;
+}
+
+#grid-canvas::-webkit-scrollbar {
+  width: 6px;
+}
+
+#grid-canvas::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+
+.dial-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  width: clamp(56px, calc(1000px / var(--grid-columns) - 24px), 90px);
+  padding: 0.2rem;
+  cursor: pointer;
+  border-radius: var(--radius);
+  background: transparent;
+  border: none;
+  transition: transform 0.15s ease, width 0.15s ease;
+  user-select: none;
+}
+
+.dial-tile:hover {
+  transform: translateY(-3px);
+}
+
+.dial-tile.dragging {
+  opacity: 0.4;
+}
+
+.dial-tile.drag-over .dial-icon {
+  outline: 2px dashed var(--accent-magenta);
+  outline-offset: 3px;
+}
+
+.dial-tile.add-tile {
+  color: var(--text-muted);
+}
+
+.dial-tile.add-tile .add-icon {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed var(--border);
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--text-muted);
+  box-shadow: none;
+}
+
+.dial-tile.add-tile:hover .add-icon {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.dial-icon {
+  width: clamp(40px, calc(1000px / var(--grid-columns) - 38px), 60px);
+  height: clamp(40px, calc(1000px / var(--grid-columns) - 38px), 60px);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: width 0.15s ease, height 0.15s ease;
+}
+
+.dial-icon img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.dial-label {
+  font-size: 0.75rem;
+  text-align: center;
+  color: var(--text-primary);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#grid-canvas.is-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.empty-state-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.empty-state-text strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Responsive collapse on narrow viewports regardless of explicit column count */
+@media (max-width: 700px) {
+  #grid-canvas {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}

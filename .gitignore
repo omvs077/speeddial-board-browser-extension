@@ -1,0 +1,16 @@
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+
+# Packaged builds
+*.zip
+*.crx
+*.pem
+
+# Logs
+*.log
