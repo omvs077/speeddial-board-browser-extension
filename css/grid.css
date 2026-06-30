@@ -37,7 +37,11 @@
 }
 
 .dial-tile:hover {
-  transform: translateY(-3px);
+  transform: translateY(-3px) scale(1.04);
+}
+
+.dial-tile:hover .dial-icon {
+  box-shadow: 0 8px 20px color-mix(in srgb, CanvasText 35%, transparent), 0 0 0 1px color-mix(in srgb, GrayText 50%, transparent);
 }
 
 .dial-tile.dragging {
@@ -126,4 +130,5 @@
     grid-template-columns: repeat(3, 1fr) !important;
   }
 }
+
 
