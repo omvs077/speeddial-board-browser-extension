@@ -2,9 +2,8 @@
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  backdrop-filter: blur(var(--blur));
-  -webkit-backdrop-filter: blur(var(--blur));
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 2px 12px color-mix(in srgb, CanvasText 8%, transparent);
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 /* Search */
@@ -22,16 +21,15 @@
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 6px;
-  backdrop-filter: blur(var(--blur));
-  -webkit-backdrop-filter: blur(var(--blur));
+  transition: border-color 0.15s ease;
 }
 
 #search-form:focus-within {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent);
 }
 
 #search-icon {
-  color: var(--accent);
+  color: GrayText;
   display: flex;
   align-items: center;
 }
@@ -57,17 +55,17 @@
   border: none;
   border-bottom: 2px solid transparent;
   cursor: pointer;
-  color: var(--text-muted);
+  color: GrayText;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .tab-pill:hover {
-  color: var(--text-primary);
+  color: CanvasText;
 }
 
 .tab-pill.active {
-  color: var(--text-primary);
-  border-bottom-color: var(--accent);
+  color: CanvasText;
+  border-bottom-color: CanvasText;
   font-weight: 500;
 }
 
@@ -165,15 +163,16 @@
 .widget-menu-btn {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: GrayText;
   cursor: pointer;
   font-size: 1.05rem;
   line-height: 1;
   padding: 0 0.2rem;
+  transition: color 0.15s ease;
 }
 
 .widget-menu-btn:hover {
-  color: var(--accent-cyan);
+  color: CanvasText;
 }
 
 .widget-dots {
@@ -187,19 +186,19 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--border);
   cursor: pointer;
   transition: background 0.15s ease;
 }
 
 .widget-dot.active {
-  background: var(--accent-cyan);
+  background: CanvasText;
 }
 
 .widget-body {
   flex: 1;
   font-size: 0.85rem;
-  color: var(--text-primary);
+  color: CanvasText;
   overflow: hidden;
 }
 
@@ -207,12 +206,12 @@
 #weather-body .temp {
   font-family: var(--font-display);
   font-size: 1.4rem;
-  color: var(--accent-cyan);
+  color: CanvasText;
 }
 
 #weather-body .cond {
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: GrayText;
 }
 
 .retry-btn {
@@ -220,33 +219,34 @@
   margin-top: 0.5rem;
   background: var(--panel-soft);
   border: 1px solid var(--border);
-  color: var(--text-primary);
+  color: CanvasText;
   font-size: 0.72rem;
   padding: 0.3rem 0.6rem;
   border-radius: 4px;
   cursor: pointer;
+  transition: border-color 0.15s ease;
 }
 
 .retry-btn:hover {
-  border-color: var(--accent);
+  border-color: CanvasText;
 }
 
 /* Clock */
 #clock-time {
   font-family: var(--font-mono);
   font-size: 1.2rem;
-  color: var(--text-primary);
+  color: CanvasText;
 }
 
 #clock-date {
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: GrayText;
   margin-top: 0.2rem;
 }
 
 #clock-week {
   font-size: 0.72rem;
-  color: var(--accent-magenta);
+  color: GrayText;
   margin-top: 0.15rem;
 }
 
@@ -268,7 +268,7 @@
   font-size: 0.8rem;
   padding: 0.25rem 0;
   cursor: pointer;
-  color: var(--text-primary);
+  color: CanvasText;
   border-bottom: 1px dashed var(--border);
   transition: opacity 0.15s ease;
 }
@@ -292,7 +292,7 @@
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-muted);
+  color: GrayText;
   padding: 0.5rem 0.7rem 0.2rem;
 }
 
@@ -303,11 +303,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: background 0.1s ease;
 }
 
 #context-menu .ctx-item:hover {
-  background: rgba(94, 231, 255, 0.1);
-  color: var(--accent-cyan);
+  background: var(--panel-soft);
+  color: CanvasText;
 }
 
 #context-menu .ctx-divider {
@@ -317,19 +318,21 @@
 }
 
 #context-menu .ctx-check {
-  color: var(--accent-cyan);
+  color: CanvasText;
   font-size: 0.75rem;
 }
 
-/* Add/Edit Link Modal */
+/* Modals */
 #modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: color-mix(in srgb, Canvas 20%, transparent);
   z-index: 998;
+  backdrop-filter: blur(2px);
 }
 
-#link-modal {
+#link-modal,
+#cat-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -339,7 +342,8 @@
   padding: 1.2rem;
 }
 
-#link-modal input {
+#link-modal input,
+#cat-modal input {
   width: 100%;
   font-size: 0.85rem;
   padding: 0.6rem 0.7rem;
@@ -347,10 +351,13 @@
   background: var(--panel-soft);
   border: 1px solid var(--border);
   border-radius: 4px;
+  color: CanvasText;
+  transition: border-color 0.15s ease;
 }
 
-#link-modal input:focus {
-  border-color: var(--accent);
+#link-modal input:focus,
+#cat-modal input:focus {
+  border-color: CanvasText;
 }
 
 .modal-actions {
@@ -367,36 +374,43 @@
   cursor: pointer;
   border: 1px solid var(--border);
   background: var(--panel-soft);
-  color: var(--text-primary);
+  color: CanvasText;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
 }
 
-#link-save-btn {
-  background: var(--accent);
-  color: #0a0a0b;
-  border-color: var(--accent);
+#link-save-btn,
+#cat-save-btn {
+  background: CanvasText;
+  color: Canvas;
+  border-color: CanvasText;
   font-weight: 600;
 }
 
-#link-cancel-btn:hover {
-  border-color: var(--text-muted);
+#link-save-btn:hover,
+#cat-save-btn:hover {
+  opacity: 0.85;
+}
+
+#link-cancel-btn:hover,
+#cat-cancel-btn:hover {
+  border-color: CanvasText;
 }
 
 /* Credit Watermark */
 #credit-watermark {
   text-align: center;
   font-size: 0.75rem;
-  color: var(--text-primary);
+  color: CanvasText;
   margin-top: 1rem;
   padding-bottom: 0.5rem;
 }
 
 #credit-watermark strong {
-  color: var(--text-primary);
   font-weight: 700;
 }
 
 #credit-watermark a {
-  color: var(--text-primary);
+  color: CanvasText;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
