@@ -511,10 +511,43 @@ const UIController = {
     return this._toggleWidget(key);
   },
 
+  _pickWallpaper() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.addEventListener("change", async () => {
+      const file = input.files[0];
+      if (!file) return;
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      await chrome.storage.local.set({ wallpaper: dataUrl });
+      this._applyWallpaper(dataUrl);
+    });
+    input.click();
+  },
+
+  async _clearWallpaper() {
+    await chrome.storage.local.remove("wallpaper");
+    this._applyWallpaper(null);
+  },
+
+  _applyWallpaper(dataUrl) {
+    document.body.style.backgroundImage = dataUrl ? "url(\"" + dataUrl + "\")" : "";
+    document.body.style.backgroundSize = dataUrl ? "cover" : "";
+    document.body.style.backgroundPosition = dataUrl ? "center" : "";
+  },
+
   async _setColumns(n) {
     this.prefs.columns = n;
     await this._savePrefs();
     this._applyColumns();
   },
 };
+
+
+
 
