@@ -85,29 +85,11 @@ const UIController = {
             items: [
               {
                 text: "Rename",
-                onClick: async () => {
-                  const newName = prompt("Rename collection:", name);
-                  if (!newName || newName === name) return;
-                  await chrome.bookmarks.update(BookmarkEngine.structure[name].folderId, {
-                    title: newName,
-                  });
-                  await BookmarkEngine.refresh();
-                  if (this.activeCategory === name) this.activeCategory = newName;
-                  this.renderTabs();
-                  this.renderGrid();
-                },
+                onClick: () => this.openCategoryModal("rename", name),
               },
               {
                 text: "Delete collection",
-                onClick: async () => {
-                  if (!confirm(`Delete "${name}" and all its bookmarks?`)) return;
-                  await BookmarkEngine.removeCategory(name);
-                  if (this.activeCategory === name) {
-                    this.activeCategory = BookmarkEngine.getCategoryNames()[0] || null;
-                  }
-                  this.renderTabs();
-                  this.renderGrid();
-                },
+                onClick: () => this.openCategoryModal("delete", name),
               },
             ],
           },
@@ -242,6 +224,66 @@ const UIController = {
 
     const saveBtn = document.getElementById("link-save-btn");
     const cancelBtn = document.getElementById("link-cancel-btn");
+    saveBtn.addEventListener("click", onSave);
+    cancelBtn.addEventListener("click", close);
+    overlay.addEventListener("click", close);
+  },
+
+  openCategoryModal(mode, name) {
+    const overlay = document.getElementById("modal-overlay");
+    const modal = document.getElementById("cat-modal");
+    const input = document.getElementById("cat-name-input");
+    const saveBtn = document.getElementById("cat-save-btn");
+    const cancelBtn = document.getElementById("cat-cancel-btn");
+
+    document.getElementById("cat-modal-title").textContent =
+      mode === "rename" ? `Rename "${name}"` : `Delete "${name}"`;
+
+    if (mode === "rename") {
+      input.value = name;
+      input.style.display = "";
+      saveBtn.textContent = "Rename";
+    } else {
+      input.style.display = "none";
+      saveBtn.textContent = "Delete";
+      saveBtn.style.background = "var(--danger)";
+      saveBtn.style.borderColor = "var(--danger)";
+    }
+
+    overlay.classList.remove("hidden");
+    modal.classList.remove("hidden");
+    if (mode === "rename") { input.focus(); input.select(); }
+
+    const close = () => {
+      overlay.classList.add("hidden");
+      modal.classList.add("hidden");
+      saveBtn.style.background = "";
+      saveBtn.style.borderColor = "";
+      saveBtn.removeEventListener("click", onSave);
+      cancelBtn.removeEventListener("click", close);
+      overlay.removeEventListener("click", close);
+    };
+
+    const onSave = async () => {
+      if (mode === "rename") {
+        const newName = input.value.trim();
+        if (!newName || newName === name) return close();
+        await chrome.bookmarks.update(
+          BookmarkEngine.structure[name].folderId, { title: newName }
+        );
+        await BookmarkEngine.refresh();
+        if (this.activeCategory === name) this.activeCategory = newName;
+      } else {
+        await BookmarkEngine.removeCategory(name);
+        if (this.activeCategory === name) {
+          this.activeCategory = BookmarkEngine.getCategoryNames()[0] || null;
+        }
+      }
+      this.renderTabs();
+      this.renderGrid();
+      close();
+    };
+
     saveBtn.addEventListener("click", onSave);
     cancelBtn.addEventListener("click", close);
     overlay.addEventListener("click", close);
@@ -396,6 +438,13 @@ const UIController = {
         })),
       },
       {
+        label: "Background",
+        items: [
+          { text: "Set Wallpaper...", onClick: () => this._pickWallpaper() },
+          { text: "Remove Wallpaper", onClick: () => this._clearWallpaper() },
+        ],
+      },
+      {
         label: "Grid Density",
         items: [4, 6, 8, 10].map((n) => ({
           text: `${n} columns`,
@@ -468,3 +517,4 @@ const UIController = {
     this._applyColumns();
   },
 };
+
