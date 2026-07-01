@@ -33,6 +33,9 @@ const UIController = {
   async _loadPrefs() {
     const { dashboardPrefs } = await chrome.storage.local.get("dashboardPrefs");
     if (dashboardPrefs) this.prefs = { ...this.prefs, ...dashboardPrefs };
+
+    const { wallpaper } = await chrome.storage.local.get("wallpaper");
+    if (wallpaper) this._applyWallpaper(wallpaper);
   },
 
   async _savePrefs() {
@@ -547,6 +550,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
