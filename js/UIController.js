@@ -542,6 +542,30 @@ const UIController = {
     document.body.style.backgroundImage = dataUrl ? "url(\"" + dataUrl + "\")" : "";
     document.body.style.backgroundSize = dataUrl ? "cover" : "";
     document.body.style.backgroundPosition = dataUrl ? "center" : "";
+    if (dataUrl) {
+      this._sampleDominantColor(dataUrl);
+    } else {
+      document.documentElement.style.removeProperty("--wallpaper-tint");
+    }
+  },
+
+  _sampleDominantColor(dataUrl) {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const w = (canvas.width = 32);
+      const h = (canvas.height = 32);
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      const data = ctx.getImageData(0, 0, w, h).data;
+      let r = 0, g = 0, b = 0, count = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        r += data[i]; g += data[i + 1]; b += data[i + 2]; count++;
+      }
+      r = Math.round(r / count); g = Math.round(g / count); b = Math.round(b / count);
+      document.documentElement.style.setProperty("--wallpaper-tint", r + ", " + g + ", " + b);
+    };
+    img.src = dataUrl;
   },
 
   async _setColumns(n) {
@@ -550,6 +574,8 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
 
 
 
