@@ -120,6 +120,14 @@ const UIController = {
     if (next) this.switchCategory(next);
   },
 
+  _openAllInCategory(name) {
+    const cat = BookmarkEngine.structure[name];
+    if (!cat || !cat.items.length) return;
+    for (const item of cat.items) {
+      chrome.tabs.create({ url: item.url, active: false });
+    }
+  },
+
   /* ---------------- Grid Rendering ---------------- */
   renderGrid() {
     const canvas = document.getElementById("grid-canvas");
@@ -579,6 +587,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
