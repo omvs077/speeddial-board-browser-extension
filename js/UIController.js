@@ -542,6 +542,7 @@ const UIController = {
     document.body.style.backgroundImage = dataUrl ? "url(\"" + dataUrl + "\")" : "";
     document.body.style.backgroundSize = dataUrl ? "cover" : "";
     document.body.style.backgroundPosition = dataUrl ? "center" : "";
+    document.body.classList.toggle("has-wallpaper", !!dataUrl);
     if (dataUrl) {
       this._sampleDominantColor(dataUrl);
     } else {
@@ -574,6 +575,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
