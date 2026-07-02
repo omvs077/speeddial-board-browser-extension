@@ -28,6 +28,10 @@
   border-color: var(--accent);
 }
 
+body.has-wallpaper #search-form {
+  background: rgba(var(--wallpaper-tint, 30, 30, 30), 0.78);
+}
+
 #search-icon {
   color: GrayText;
   display: flex;
@@ -95,7 +99,7 @@
 }
 
 body.has-wallpaper .widget {
-  background: rgba(var(--wallpaper-tint, 30, 30, 30), 0.55);
+  background: rgba(var(--wallpaper-tint, 30, 30, 30), 0.78);
 }
 
 .widget.size-sm {
@@ -431,6 +435,9 @@ body.has-wallpaper .widget {
 #credit-watermark a:hover {
   opacity: 0.75;
 }
+
+
+
 
 
 
