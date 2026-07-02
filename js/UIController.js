@@ -559,6 +559,7 @@ const UIController = {
       this._sampleDominantColor(dataUrl);
     } else {
       document.documentElement.style.removeProperty("--wallpaper-tint");
+      document.documentElement.style.removeProperty("--wallpaper-text");
     }
   },
 
@@ -577,6 +578,8 @@ const UIController = {
       }
       r = Math.round(r / count); g = Math.round(g / count); b = Math.round(b / count);
       document.documentElement.style.setProperty("--wallpaper-tint", r + ", " + g + ", " + b);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      document.documentElement.style.setProperty("--wallpaper-text", luminance > 0.55 ? "#1a1a1a" : "#f5f5f5");
     };
     img.src = dataUrl;
   },
@@ -587,6 +590,8 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
 
 
 
