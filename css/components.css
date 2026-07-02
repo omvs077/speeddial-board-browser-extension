@@ -91,7 +91,11 @@
 .widget:hover,
 .widget:focus-within {
   border-color: color-mix(in srgb, GrayText 60%, transparent);
-  box-shadow: 0 6px 18px color-mix(in srgb, CanvasText 18%, transparent);
+  box-shadow: 0 6px 18px color-mix(in srgb, black 35%, transparent);
+}
+
+body.has-wallpaper .widget {
+  background: rgba(var(--wallpaper-tint, 30, 30, 30), 0.55);
 }
 
 .widget.size-sm {
@@ -427,6 +431,9 @@
 #credit-watermark a:hover {
   opacity: 0.75;
 }
+
+
+
 
 
 
