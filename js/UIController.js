@@ -94,6 +94,10 @@ const UIController = {
                 text: "Delete collection",
                 onClick: () => this.openCategoryModal("delete", name),
               },
+              {
+                text: "Open all in new tabs",
+                onClick: () => this._openAllInCategory(name),
+              },
             ],
           },
         ]);
@@ -575,6 +579,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
