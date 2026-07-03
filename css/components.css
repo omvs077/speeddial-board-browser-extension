@@ -30,6 +30,13 @@
 
 body.has-wallpaper #search-form {
   background: rgba(var(--wallpaper-tint, 30, 30, 30), 0.78);
+  color: var(--wallpaper-text, CanvasText);
+}
+
+body.has-wallpaper .widget,
+body.has-wallpaper .widget h3,
+body.has-wallpaper #search-input {
+  color: var(--wallpaper-text, CanvasText);
 }
 
 #search-icon {
@@ -435,6 +442,7 @@ body.has-wallpaper .widget {
 #credit-watermark a:hover {
   opacity: 0.75;
 }
+
 
 
 
