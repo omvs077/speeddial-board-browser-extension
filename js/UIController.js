@@ -13,6 +13,7 @@ const UIController = {
     widgets: { weather: true, clock: true, todo: true },
     sizes: { weather: "md", clock: "md", todo: "md" },
     timeFormat: "24h",
+    searchEngine: "google",
   },
 
   async init() {
@@ -574,6 +575,14 @@ const UIController = {
           { text: "24-hour", checked: this.prefs.timeFormat === "24h", onClick: () => this._setTimeFormat("24h") },
           { text: "12-hour", checked: this.prefs.timeFormat === "12h", onClick: () => this._setTimeFormat("12h") },
         ],
+      },
+      {
+        label: "Search Engine",
+        items: [
+          { text: "Google", checked: this.prefs.searchEngine === "google", onClick: () => this._setSearchEngine("google") },
+          { text: "Bing", checked: this.prefs.searchEngine === "bing", onClick: () => this._setSearchEngine("bing") },
+          { text: "DuckDuckGo", checked: this.prefs.searchEngine === "duckduckgo", onClick: () => this._setSearchEngine("duckduckgo") },
+        ],
       },      {
         label: null,
         items: [
@@ -698,12 +707,20 @@ const UIController = {
     await this._savePrefs();
   },
 
+  async _setSearchEngine(engine) {
+    this.prefs.searchEngine = engine;
+    await this._savePrefs();
+  },
+
   async _setColumns(n) {
     this.prefs.columns = n;
     await this._savePrefs();
     this._applyColumns();
   },
 };
+
+
+
 
 
 
