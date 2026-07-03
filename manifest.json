@@ -7,6 +7,7 @@
     "bookmarks",
     "storage",
     "tabs",
+    "history",
     "geolocation"
   ],
   "host_permissions": [
@@ -22,4 +23,5 @@
     "128": "icons/icon128.png"
   }
 }
+
 
