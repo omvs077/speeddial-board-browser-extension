@@ -569,6 +569,12 @@ const UIController = {
         })),
       },
       {
+        label: "Time Format",
+        items: [
+          { text: "24-hour", checked: this.prefs.timeFormat === "24h", onClick: () => this._setTimeFormat("24h") },
+          { text: "12-hour", checked: this.prefs.timeFormat === "12h", onClick: () => this._setTimeFormat("12h") },
+        ],
+      },      {
         label: null,
         items: [
           {
@@ -687,12 +693,23 @@ const UIController = {
     img.src = dataUrl;
   },
 
+  async _setTimeFormat(fmt) {
+    this.prefs.timeFormat = fmt;
+    await this._savePrefs();
+  },
+
   async _setColumns(n) {
     this.prefs.columns = n;
     await this._savePrefs();
     this._applyColumns();
   },
 };
+
+
+
+
+
+
 
 
 
