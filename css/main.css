@@ -94,3 +94,19 @@ h3 {
 
 
 
+
+/* Wallpaper text-contrast override — applies to every element using
+   CanvasText/GrayText/--text-muted once a custom wallpaper is active */
+body.has-wallpaper {
+  --text-muted: var(--wallpaper-text-muted, GrayText);
+}
+body.has-wallpaper #search-icon,
+body.has-wallpaper input::placeholder,
+body.has-wallpaper .tab-pill:not(.active),
+body.has-wallpaper .dial-tile,
+body.has-wallpaper .widget-menu-btn,
+body.has-wallpaper #credit-watermark {
+  color: var(--wallpaper-text-muted, var(--wallpaper-text, GrayText));
+}
+
+
