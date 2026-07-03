@@ -415,16 +415,29 @@ const UIController = {
       return;
     }
     box.innerHTML = matches
-      .map((s, i) => "<li data-index=\"" + i + "\">" + s + "</li>")
+      .map((s, i) => "<li data-index=\"" + i + "\"><span class=\"sg-text\">" + s + "</span><button class=\"sg-remove\" data-remove=\"" + i + "\" aria-label=\"Remove\">&times;</button></li>")
       .join("");
     box.classList.remove("hidden");
     box.querySelectorAll("li").forEach((li) => {
-      li.addEventListener("click", () => {
-        document.getElementById("search-input").value = li.textContent;
+      li.querySelector(".sg-text").addEventListener("click", () => {
+        document.getElementById("search-input").value = li.querySelector(".sg-text").textContent;
         box.classList.add("hidden");
         document.getElementById("search-form").requestSubmit();
       });
     });
+    box.querySelectorAll(".sg-remove").forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const text = matches[Number(btn.dataset.remove)];
+        await this._removeRecentSearch(text);
+        this._renderSuggestions(document.getElementById("search-input").value.trim());
+      });
+    });
+  },
+
+  async _removeRecentSearch(q) {
+    const { recentSearches = [] } = await chrome.storage.local.get("recentSearches");
+    await chrome.storage.local.set({ recentSearches: recentSearches.filter((s) => s !== q) });
   },
 
   _handleSuggestionKeys(e) {
@@ -660,6 +673,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
