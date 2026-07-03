@@ -374,12 +374,74 @@ const UIController = {
   _bindSearch() {
     const form = document.getElementById("search-form");
     const input = document.getElementById("search-input");
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const q = input.value.trim();
       if (!q) return;
-      window.location.href = `https://www.google.com/search?q=${encodeURIComponent(q)}`;
+      await this._saveRecentSearch(q);
+      window.location.href = "https://www.google.com/search?q=" + encodeURIComponent(q);
     });
+
+    input.addEventListener("input", () => this._renderSuggestions(input.value.trim()));
+    input.addEventListener("focus", () => this._renderSuggestions(input.value.trim()));
+    input.addEventListener("keydown", (e) => this._handleSuggestionKeys(e));
+    document.addEventListener("click", (e) => {
+      const box = document.getElementById("search-suggestions");
+      if (box && !box.contains(e.target) && e.target !== input) box.classList.add("hidden");
+    });
+  },
+
+  async _saveRecentSearch(q) {
+    const { recentSearches = [] } = await chrome.storage.local.get("recentSearches");
+    const updated = [q, ...recentSearches.filter((s) => s !== q)].slice(0, 8);
+    await chrome.storage.local.set({ recentSearches: updated });
+  },
+
+  async _renderSuggestions(query) {
+    const box = document.getElementById("search-suggestions");
+    const { recentSearches = [] } = await chrome.storage.local.get("recentSearches");
+    const matches = query
+      ? recentSearches.filter((s) => s.toLowerCase().includes(query.toLowerCase()))
+      : recentSearches;
+    if (!matches.length) {
+      box.classList.add("hidden");
+      box.innerHTML = "";
+      return;
+    }
+    box.innerHTML = matches
+      .map((s, i) => "<li data-index=\"" + i + "\">" + s + "</li>")
+      .join("");
+    box.classList.remove("hidden");
+    box.querySelectorAll("li").forEach((li) => {
+      li.addEventListener("click", () => {
+        document.getElementById("search-input").value = li.textContent;
+        box.classList.add("hidden");
+        document.getElementById("search-form").requestSubmit();
+      });
+    });
+  },
+
+  _handleSuggestionKeys(e) {
+    const box = document.getElementById("search-suggestions");
+    if (box.classList.contains("hidden")) return;
+    const items = [...box.querySelectorAll("li")];
+    if (!items.length) return;
+    let active = items.findIndex((li) => li.classList.contains("active"));
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      active = (active + 1) % items.length;
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      active = (active - 1 + items.length) % items.length;
+    } else if (e.key === "Enter" && active >= 0) {
+      e.preventDefault();
+      items[active].click();
+      return;
+    } else {
+      return;
+    }
+    items.forEach((li) => li.classList.remove("active"));
+    items[active].classList.add("active");
   },
 
   /* ---------------- Custom Context Menu ---------------- */
@@ -560,6 +622,7 @@ const UIController = {
     } else {
       document.documentElement.style.removeProperty("--wallpaper-tint");
       document.documentElement.style.removeProperty("--wallpaper-text");
+      document.documentElement.style.removeProperty("--wallpaper-text-muted");
     }
   },
 
@@ -580,6 +643,7 @@ const UIController = {
       document.documentElement.style.setProperty("--wallpaper-tint", r + ", " + g + ", " + b);
       const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
       document.documentElement.style.setProperty("--wallpaper-text", luminance > 0.55 ? "#1a1a1a" : "#f5f5f5");
+      document.documentElement.style.setProperty("--wallpaper-text-muted", luminance > 0.55 ? "#4a4a4a" : "#c9c9c9");
     };
     img.src = dataUrl;
   },
@@ -590,6 +654,9 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
+
 
 
 
