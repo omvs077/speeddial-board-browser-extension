@@ -379,7 +379,13 @@ const UIController = {
       const q = input.value.trim();
       if (!q) return;
       await this._saveRecentSearch(q);
-      window.location.href = "https://www.google.com/search?q=" + encodeURIComponent(q);
+      const engines = {
+        google: "https://www.google.com/search?q=",
+        bing: "https://www.bing.com/search?q=",
+        duckduckgo: "https://duckduckgo.com/?q=",
+      };
+      const engine = this.prefs.searchEngine || "google";
+      window.location.href = (engines[engine] || engines.google) + encodeURIComponent(q);
     });
 
     input.addEventListener("input", () => this._renderSuggestions(input.value.trim()));
@@ -654,6 +660,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
