@@ -456,3 +456,39 @@ body.has-wallpaper .widget {
 
 
 
+
+#search-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  list-style: none;
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  z-index: 20;
+}
+
+#search-suggestions.hidden {
+  display: none;
+}
+
+#search-suggestions li {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+#search-suggestions li:hover,
+#search-suggestions li.active {
+  background: color-mix(in srgb, CanvasText 8%, transparent);
+}
+
+body.has-wallpaper #search-suggestions {
+  background: rgba(var(--wallpaper-tint, 30, 30, 30), 0.9);
+}
+
+body.has-wallpaper #search-suggestions li {
+  color: var(--wallpaper-text, CanvasText);
+}
