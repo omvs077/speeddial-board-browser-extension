@@ -14,6 +14,7 @@
 
 #search-form {
   width: min(700px, 80vw);
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.7rem;
@@ -492,3 +493,4 @@ body.has-wallpaper #search-suggestions {
 body.has-wallpaper #search-suggestions li {
   color: var(--wallpaper-text, CanvasText);
 }
+
