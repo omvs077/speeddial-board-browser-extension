@@ -542,3 +542,36 @@ body.has-wallpaper .sg-remove:hover {
   margin-right: 0.5rem;
   opacity: 0.7;
 }
+
+#menu-trigger {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 56px;
+  border: none;
+  border-radius: 6px 0 0 6px;
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-right: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 50;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+#menu-trigger:hover {
+  background: color-mix(in srgb, CanvasText 8%, transparent);
+  color: var(--text-primary);
+}
+
+body.has-wallpaper #menu-trigger {
+  background: rgba(var(--wallpaper-tint, 30, 30, 30), 0.78);
+  color: var(--wallpaper-text-muted, GrayText);
+}
+
+body.has-wallpaper #menu-trigger:hover {
+  color: var(--wallpaper-text, CanvasText);
+}
