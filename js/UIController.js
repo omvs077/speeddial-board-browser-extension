@@ -454,7 +454,7 @@ const UIController = {
       active = (active - 1 + items.length) % items.length;
     } else if (e.key === "Enter" && active >= 0) {
       e.preventDefault();
-      items[active].click();
+      items[active].querySelector(".sg-text").click();
       return;
     } else {
       return;
@@ -673,6 +673,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
