@@ -431,7 +431,7 @@ body.has-wallpaper .widget {
   font-size: 0.75rem;
   color: CanvasText;
   padding: 0.5rem 0;
-  background: var(--panel-soft);
+  background: transparent;
 }
 
 #credit-watermark strong {
@@ -503,3 +503,37 @@ body.has-wallpaper #search-suggestions li {
 
 
 
+
+
+#search-suggestions li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sg-text {
+  flex: 1;
+  cursor: pointer;
+}
+
+.sg-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.3rem;
+  color: var(--text-muted);
+}
+
+.sg-remove:hover {
+  color: var(--text-primary);
+}
+
+body.has-wallpaper .sg-remove {
+  color: var(--wallpaper-text-muted, var(--wallpaper-text, GrayText));
+}
+
+body.has-wallpaper .sg-remove:hover {
+  color: var(--wallpaper-text, CanvasText);
+}
