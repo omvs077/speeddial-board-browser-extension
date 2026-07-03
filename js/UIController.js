@@ -406,30 +406,49 @@ const UIController = {
   async _renderSuggestions(query) {
     const box = document.getElementById("search-suggestions");
     const { recentSearches = [] } = await chrome.storage.local.get("recentSearches");
-    const matches = query
+    const searchMatches = (query
       ? recentSearches.filter((s) => s.toLowerCase().includes(query.toLowerCase()))
-      : recentSearches;
-    if (!matches.length) {
+      : recentSearches
+    ).map((s) => ({ type: "search", text: s, url: null }));
+
+    let historyMatches = [];
+    if (query) {
+      const results = await chrome.history.search({ text: query, maxResults: 5 });
+      historyMatches = results.map((r) => ({ type: "history", text: r.title || r.url, url: r.url }));
+    }
+
+    const combined = [...searchMatches, ...historyMatches];
+    if (!combined.length) {
       box.classList.add("hidden");
       box.innerHTML = "";
       return;
     }
-    box.innerHTML = matches
-      .map((s, i) => "<li data-index=\"" + i + "\"><span class=\"sg-text\">" + s + "</span><button class=\"sg-remove\" data-remove=\"" + i + "\" aria-label=\"Remove\">&times;</button></li>")
+    box.innerHTML = combined
+      .map((m, i) => {
+        const icon = m.type === "history" ? "&#127760;" : "&#128337;";
+        const removeBtn = m.type === "search" ? "<button class=\"sg-remove\" data-remove=\"" + i + "\" aria-label=\"Remove\">&times;</button>" : "";
+        return "<li data-index=\"" + i + "\"><span class=\"sg-icon\">" + icon + "</span><span class=\"sg-text\">" + m.text + "</span>" + removeBtn + "</li>";
+      })
       .join("");
     box.classList.remove("hidden");
     box.querySelectorAll("li").forEach((li) => {
+      const idx = Number(li.dataset.index);
+      const item = combined[idx];
       li.querySelector(".sg-text").addEventListener("click", () => {
-        document.getElementById("search-input").value = li.querySelector(".sg-text").textContent;
         box.classList.add("hidden");
-        document.getElementById("search-form").requestSubmit();
+        if (item.type === "history" && item.url) {
+          window.location.href = item.url;
+        } else {
+          document.getElementById("search-input").value = item.text;
+          document.getElementById("search-form").requestSubmit();
+        }
       });
     });
     box.querySelectorAll(".sg-remove").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         e.stopPropagation();
-        const text = matches[Number(btn.dataset.remove)];
-        await this._removeRecentSearch(text);
+        const item = combined[Number(btn.dataset.remove)];
+        await this._removeRecentSearch(item.text);
         this._renderSuggestions(document.getElementById("search-input").value.trim());
       });
     });
@@ -673,6 +692,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
