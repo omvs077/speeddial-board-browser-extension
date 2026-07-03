@@ -122,7 +122,7 @@ const Widgets = {
   _tickClock() {
     const now = new Date();
     document.getElementById("clock-time").textContent =
-      now.toLocaleTimeString([], { hour12: false });
+      now.toLocaleTimeString([], { hour12: UIController.prefs.timeFormat === "12h" });
     document.getElementById("clock-date").textContent =
       now.toLocaleDateString([], { weekday: "long", year: "numeric", month: "long", day: "numeric" });
     document.getElementById("clock-week").textContent =
@@ -198,3 +198,4 @@ const Widgets = {
     });
   },
 };
+

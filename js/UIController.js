@@ -12,6 +12,7 @@ const UIController = {
     columns: 6,
     widgets: { weather: true, clock: true, todo: true },
     sizes: { weather: "md", clock: "md", todo: "md" },
+    timeFormat: "24h",
   },
 
   async init() {
@@ -692,6 +693,9 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
+
 
 
 
