@@ -487,6 +487,7 @@ const UIController = {
   /* ---------------- Custom Context Menu ---------------- */
   _bindContextMenu() {
     document.getElementById("menu-trigger").addEventListener("click", (e) => {
+      e.stopPropagation();
       const rect = e.target.getBoundingClientRect();
       this.openContextMenu(rect.left, rect.bottom + 6, this._defaultMenuItems());
     });
@@ -718,6 +719,8 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
 
 
 
