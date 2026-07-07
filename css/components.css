@@ -309,7 +309,6 @@ body.has-wallpaper .widget {
   position: fixed;
   z-index: 999;
   min-width: 220px;
-  max-height: 80vh;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 0.5rem;
@@ -578,4 +577,5 @@ body.has-wallpaper #menu-trigger {
 body.has-wallpaper #menu-trigger:hover {
   color: var(--wallpaper-text, CanvasText);
 }
+
 

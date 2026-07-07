@@ -512,7 +512,7 @@ const UIController = {
       section.items.forEach((item) => {
         const row = document.createElement("div");
         row.className = "ctx-item";
-        row.innerHTML = `<span>${item.text}</span>${item.checked ? '<span class="ctx-check">âœ“</span>' : ""}`;
+        row.innerHTML = `<span>${item.text}</span>${item.checked ? '<span class="ctx-check">\u2713</span>' : ""}`;
         row.addEventListener("click", () => {
           item.onClick();
           menu.classList.add("hidden");
@@ -534,7 +534,7 @@ const UIController = {
       const top = Math.max(10, Math.min(y, innerHeight - rect.height - 10));
       menu.style.left = Math.min(x, innerWidth - rect.width - 10) + "px";
       menu.style.top = top + "px";
-      menu.style.maxHeight = Math.min(innerHeight - top - 10, innerHeight * 0.8) + "px";
+      menu.style.maxHeight = (innerHeight - top - 10) + "px";
     });
   },
 
@@ -721,6 +721,10 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
+
+
 
 
 
