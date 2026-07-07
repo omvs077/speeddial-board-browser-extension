@@ -414,12 +414,22 @@ const UIController = {
     ).map((s) => ({ type: "search", text: s, url: null }));
 
     let historyMatches = [];
+    let bookmarkMatches = [];
     if (query) {
-      const results = await chrome.history.search({ text: query, maxResults: 5 });
-      historyMatches = results.map((r) => ({ type: "history", text: r.title || r.url, url: r.url }));
+      const results = await chrome.history.search({ text: query, maxResults: 10 });
+      results.sort((a, b) => (b.visitCount || 0) - (a.visitCount || 0));
+      historyMatches = results.slice(0, 5).map((r) => ({ type: "history", text: r.title || r.url, url: r.url }));
+
+      const bookmarks = await chrome.bookmarks.search(query);
+      const q = query.toLowerCase();
+      bookmarkMatches = bookmarks
+        .filter((b) => b.url)
+        .filter((b) => (b.title || "").toLowerCase().includes(q) || b.url.toLowerCase().includes(q))
+        .slice(0, 3)
+        .map((b) => ({ type: "bookmark", text: b.title || b.url, url: b.url }));
     }
 
-    const combined = [...searchMatches, ...historyMatches];
+    const combined = [...bookmarkMatches, ...searchMatches, ...historyMatches];
     if (!combined.length) {
       box.classList.add("hidden");
       box.innerHTML = "";
@@ -427,7 +437,7 @@ const UIController = {
     }
     box.innerHTML = combined
       .map((m, i) => {
-        const icon = m.type === "history" ? "&#127760;" : "&#128337;";
+        const icon = m.type === "history" ? "&#127760;" : m.type === "bookmark" ? "&#11088;" : "&#128337;";
         const removeBtn = m.type === "search" ? "<button class=\"sg-remove\" data-remove=\"" + i + "\" aria-label=\"Remove\">&times;</button>" : "";
         return "<li data-index=\"" + i + "\"><span class=\"sg-icon\">" + icon + "</span><span class=\"sg-text\">" + m.text + "</span>" + removeBtn + "</li>";
       })
@@ -438,7 +448,7 @@ const UIController = {
       const item = combined[idx];
       li.querySelector(".sg-text").addEventListener("click", () => {
         box.classList.add("hidden");
-        if (item.type === "history" && item.url) {
+        if ((item.type === "history" || item.type === "bookmark") && item.url) {
           window.location.href = item.url;
         } else {
           document.getElementById("search-input").value = item.text;
@@ -726,6 +736,9 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
+
 
 
 
