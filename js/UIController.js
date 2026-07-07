@@ -489,7 +489,7 @@ const UIController = {
     document.getElementById("menu-trigger").addEventListener("click", (e) => {
       e.stopPropagation();
       const rect = e.target.getBoundingClientRect();
-      this.openContextMenu(rect.left, rect.bottom + 6, this._defaultMenuItems());
+      this.openContextMenu(rect.left, rect.bottom + 6, this._defaultMenuItems(), true);
     });
 
     document.addEventListener("click", (e) => {
@@ -498,7 +498,7 @@ const UIController = {
     });
   },
 
-  openContextMenu(x, y, sections) {
+  openContextMenu(x, y, sections, centerVertically) {
     const menu = document.getElementById("context-menu");
     menu.innerHTML = "";
 
@@ -531,7 +531,12 @@ const UIController = {
     const { innerWidth, innerHeight } = window;
     requestAnimationFrame(() => {
       const rect = menu.getBoundingClientRect();
-      const top = Math.max(10, Math.min(y, innerHeight - rect.height - 10));
+      let top;
+      if (centerVertically) {
+        top = Math.max(10, Math.min((innerHeight - rect.height) / 2, innerHeight - rect.height - 10));
+      } else {
+        top = Math.max(10, Math.min(y, innerHeight - rect.height - 10));
+      }
       menu.style.left = Math.min(x, innerWidth - rect.width - 10) + "px";
       menu.style.top = top + "px";
       menu.style.maxHeight = (innerHeight - top - 10) + "px";
@@ -721,6 +726,9 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
+
 
 
 
