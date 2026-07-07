@@ -1,4 +1,4 @@
-{
+﻿{
   "manifest_version": 3,
   "name": "SpeedDial Board",
   "version": "1.0.0",
@@ -12,6 +12,8 @@
   ],
   "host_permissions": [
     "https://api.open-meteo.com/*",
+    "https://geocoding-api.open-meteo.com/*",
+    "https://suggestqueries.google.com/*",
     "https://www.google.com/*"
   ],
   "chrome_url_overrides": {
@@ -23,5 +25,7 @@
     "128": "icons/icon128.png"
   }
 }
+
+
 
 
