@@ -532,7 +532,7 @@ const UIController = {
     requestAnimationFrame(() => {
       const rect = menu.getBoundingClientRect();
       menu.style.left = `${Math.min(x, innerWidth - rect.width - 10)}px`;
-      menu.style.top = `${Math.min(y, innerHeight - rect.height - 10)}px`;
+      menu.style.top = `${Math.max(10, Math.min(y, innerHeight - rect.height - 10))}px`;
     });
   },
 
@@ -719,6 +719,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
