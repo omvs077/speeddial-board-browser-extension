@@ -1,4 +1,4 @@
-/**
+﻿/**
  * UIController.js
  * Owns all rendering + interaction logic for the dashboard: the tab ribbon,
  * the speed dial grid (including drag-and-drop reordering and swipe
@@ -512,7 +512,7 @@ const UIController = {
       section.items.forEach((item) => {
         const row = document.createElement("div");
         row.className = "ctx-item";
-        row.innerHTML = `<span>${item.text}</span>${item.checked ? '<span class="ctx-check">✓</span>' : ""}`;
+        row.innerHTML = `<span>${item.text}</span>${item.checked ? '<span class="ctx-check">âœ“</span>' : ""}`;
         row.addEventListener("click", () => {
           item.onClick();
           menu.classList.add("hidden");
@@ -531,8 +531,10 @@ const UIController = {
     const { innerWidth, innerHeight } = window;
     requestAnimationFrame(() => {
       const rect = menu.getBoundingClientRect();
-      menu.style.left = `${Math.min(x, innerWidth - rect.width - 10)}px`;
-      menu.style.top = `${Math.max(10, Math.min(y, innerHeight - rect.height - 10))}px`;
+      const top = Math.max(10, Math.min(y, innerHeight - rect.height - 10));
+      menu.style.left = Math.min(x, innerWidth - rect.width - 10) + "px";
+      menu.style.top = top + "px";
+      menu.style.maxHeight = Math.min(innerHeight - top - 10, innerHeight * 0.8) + "px";
     });
   },
 
@@ -588,7 +590,7 @@ const UIController = {
         label: null,
         items: [
           {
-            text: "Add new collection…",
+            text: "Add new collectionâ€¦",
             onClick: async () => {
               const name = prompt("New collection name:");
               if (!name) return;
@@ -638,7 +640,7 @@ const UIController = {
     this._applyWidgetVisibility();
   },
 
-  // Public alias used by widgets.js's own "⋯" menu.
+  // Public alias used by widgets.js's own "â‹¯" menu.
   toggleWidgetByMenu(key) {
     return this._toggleWidget(key);
   },
@@ -719,6 +721,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
