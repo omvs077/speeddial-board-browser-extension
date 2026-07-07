@@ -590,7 +590,7 @@ const UIController = {
         label: null,
         items: [
           {
-            text: "Add new collectionâ€¦",
+            text: "Add new collection\u2026",
             onClick: async () => {
               const name = prompt("New collection name:");
               if (!name) return;
@@ -721,6 +721,7 @@ const UIController = {
     this._applyColumns();
   },
 };
+
 
 
 
