@@ -228,6 +228,14 @@ body.has-wallpaper .widget {
 }
 
 /* Weather */
+#weather-body .location-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+}
+
 #weather-body .temp {
   font-family: var(--font-display);
   font-size: 1.4rem;
@@ -254,6 +262,22 @@ body.has-wallpaper .widget {
 
 .retry-btn:hover {
   border-color: CanvasText;
+}
+
+.link-btn {
+  display: block;
+  margin-top: 0.4rem;
+  background: none;
+  border: none;
+  padding: 0;
+  color: AccentColor;
+  font-size: 0.72rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  color: CanvasText;
 }
 
 /* Clock */
@@ -450,20 +474,6 @@ body.has-wallpaper .widget {
   opacity: 0.75;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #search-suggestions {
   position: absolute;
   top: calc(100% + 4px);
@@ -499,13 +509,6 @@ body.has-wallpaper #search-suggestions {
 body.has-wallpaper #search-suggestions li {
   color: var(--wallpaper-text, CanvasText);
 }
-
-
-
-
-
-
-
 
 #search-suggestions li {
   display: flex;
@@ -577,5 +580,8 @@ body.has-wallpaper #menu-trigger {
 body.has-wallpaper #menu-trigger:hover {
   color: var(--wallpaper-text, CanvasText);
 }
+
+
+
 
 
