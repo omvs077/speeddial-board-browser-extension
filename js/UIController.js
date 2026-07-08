@@ -399,6 +399,42 @@ const UIController = {
     });
   },
 
+
+  async _fetchWebSuggestions(query) {
+    try {
+      const url = "https://suggestqueries.google.com/complete/search?client=firefox&q=" + encodeURIComponent(query);
+      const res = await fetch(url);
+      const data = await res.json();
+      const list = data[1] || [];
+      return list.slice(0, 5).map((s) => ({ type: "web", text: s, url: null }));
+    } catch (err) {
+      return [];
+    }
+  },
+
+  _interleaveByRelevance(query, items) {
+    const q = query.toLowerCase();
+    const seen = new Set();
+    const deduped = items.filter((item) => {
+      const key = (item.url || item.text).toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    const score = (item) => {
+      const t = item.text.toLowerCase();
+      if (t === q) return 0;
+      if (t.startsWith(q)) return 1;
+      if (t.includes(q)) return 2;
+      return 3;
+    };
+    return deduped
+      .map((item, i) => ({ item, i, s: score(item) }))
+      .sort((a, b) => a.s - b.s || a.i - b.i)
+      .map((x) => x.item)
+      .slice(0, 10);
+  },
+
   async _saveRecentSearch(q) {
     const { recentSearches = [] } = await chrome.storage.local.get("recentSearches");
     const updated = [q, ...recentSearches.filter((s) => s !== q)].slice(0, 8);
@@ -429,7 +465,17 @@ const UIController = {
         .map((b) => ({ type: "bookmark", text: b.title || b.url, url: b.url }));
     }
 
-    const combined = [...bookmarkMatches, ...searchMatches, ...historyMatches];
+    let webMatches = [];
+    if (query) {
+      webMatches = await this._fetchWebSuggestions(query);
+    }
+
+    const combined = this._interleaveByRelevance(query, [
+      ...bookmarkMatches,
+      ...historyMatches,
+      ...webMatches,
+      ...searchMatches,
+    ]);
     if (!combined.length) {
       box.classList.add("hidden");
       box.innerHTML = "";
@@ -437,8 +483,9 @@ const UIController = {
     }
     box.innerHTML = combined
       .map((m, i) => {
-        const icon = m.type === "history" ? "&#127760;" : m.type === "bookmark" ? "&#11088;" : "&#128337;";
+        const icon = m.type === "history" ? "&#127760;" : m.type === "bookmark" ? "&#11088;" : m.type === "web" ? "&#128269;" : "&#128337;";
         const removeBtn = m.type === "search" ? "<button class=\"sg-remove\" data-remove=\"" + i + "\" aria-label=\"Remove\">&times;</button>" : "";
+        // note: "web" suggestions use the same click path as "search" (submit query), handled below via type check
         return "<li data-index=\"" + i + "\"><span class=\"sg-icon\">" + icon + "</span><span class=\"sg-text\">" + m.text + "</span>" + removeBtn + "</li>";
       })
       .join("");
@@ -451,6 +498,7 @@ const UIController = {
         if ((item.type === "history" || item.type === "bookmark") && item.url) {
           window.location.href = item.url;
         } else {
+          // covers "search" and "web" types: fill input and submit
           document.getElementById("search-input").value = item.text;
           document.getElementById("search-form").requestSubmit();
         }
@@ -736,6 +784,15 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
+
+
+
+
+
+
+
 
 
 
