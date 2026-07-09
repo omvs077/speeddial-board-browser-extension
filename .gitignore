@@ -1,4 +1,4 @@
-# OS cruft
+﻿# OS cruft
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -14,3 +14,6 @@ desktop.ini
 
 # Logs
 *.log
+# Editor backups
+*.bak*
+
