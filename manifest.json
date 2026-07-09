@@ -8,7 +8,8 @@
     "storage",
     "tabs",
     "history",
-    "geolocation"
+    "geolocation",
+    "unlimitedStorage"
   ],
   "host_permissions": [
     "https://api.open-meteo.com/*",
@@ -25,6 +26,7 @@
     "128": "icons/icon128.png"
   }
 }
+
 
 
 

@@ -1,4 +1,4 @@
-# SpeedDial Board
+﻿# SpeedDial Board
 
 A Manifest V3 browser extension that replaces the new tab page with a Vivaldi-style speed dial dashboard. Bookmarks live in an isolated `Dashboard Hub` folder using the native `chrome.bookmarks` API (so they sync across devices but stay out of the visible bookmark bar), grid density is explicitly controlled (4–10 columns), and a bottom dock holds three resizable, toggleable widgets: weather, a live clock with ISO week tracking, and a local to-do list.
 
@@ -68,7 +68,6 @@ SpeedDial-Board/
 
 ## Notes
 
-- The placeholder icons in `icons/` are simple generated shapes — replace them with your own artwork before publishing to a store.
 - Favicons are fetched via Google's public favicon endpoint (`https://www.google.com/s2/favicons`); no API key needed.
 - Weather and manual-city geocoding use Open-Meteo (`api.open-meteo.com`, `geocoding-api.open-meteo.com`) — no API key needed.
 - Web search suggestions use Google's public suggest endpoint (`suggestqueries.google.com`) regardless of your selected search engine.
@@ -76,3 +75,7 @@ SpeedDial-Board/
 
 Crafted by **Dvvyom** | [GitHub](https://github.com/omvs077) |
 [omvs077@gmail.com](mailto:omvs077@gmail.com) — suggestions/feedback welcomed
+
+## License
+
+[MIT](./LICENSE)'

@@ -1,0 +1,53 @@
+# Privacy Policy — SpeedDial Board
+
+_Last updated: July 2026_
+
+SpeedDial Board is a new-tab dashboard extension. This policy explains what data the extension accesses, where it goes, and what stays on your device.
+
+## Summary
+
+SpeedDial Board does not collect, sell, or transmit your personal data to any server we operate. We don't run any backend — the extension talks directly to your browser's local storage and to a small number of third-party APIs needed for specific features, listed below.
+
+## Permissions and why they're needed
+
+| Permission | Purpose |
+|---|---|
+| `bookmarks` | Read and organize your bookmarks into the speed-dial grid and collections. |
+| `storage` | Save your preferences (grid layout, widget visibility, time format, search engine choice) locally in your browser. |
+| `unlimitedStorage` | Allows storing larger data locally, such as an uploaded video wallpaper, without hitting default browser storage caps. |
+| `tabs` | Open multiple bookmarks at once via "Open all in new tabs." |
+| `history` | Show matching entries from your browsing history in the search-suggestions dropdown. |
+| `geolocation` | Get your approximate location to show local weather. You can decline this and enter a city manually instead. |
+
+## Data storage
+
+All of the following is stored **only on your device**, using `chrome.storage.local` or IndexedDB (for larger files like video wallpapers). None of it is sent to us or any server we control:
+
+- Your bookmark folder structure and speed-dial layout
+- Grid density, widget visibility/size, time format, and search engine preference
+- Recent search queries (used to power the local suggestions list)
+- Uploaded wallpaper images or videos
+- To-do list items
+
+You can clear any of this at any time by removing the extension or clearing its storage via `chrome://extensions`.
+
+## Third-party requests
+
+Some features require sending a request directly from your browser to a third-party service. These requests are made straight from your device to the third party — SpeedDial Board itself never sees or stores the data in transit.
+
+| Feature | Service contacted | Data sent |
+|---|---|---|
+| Weather | Open-Meteo (`api.open-meteo.com`) | Latitude/longitude (from geolocation or your manually entered city) |
+| Manual city weather lookup | Open-Meteo Geocoding (`geocoding-api.open-meteo.com`) | The city name you type |
+| Web search suggestions | Google Suggest (`suggestqueries.google.com`) | The text you've typed in the search bar, as you type it |
+| Performing a search | Google, Bing, or DuckDuckGo (whichever you've selected) | Your search query, same as typing it into that engine's own search box |
+
+None of these third-party services are controlled by us, and their use of your data is governed by their own privacy policies.
+
+## Changes to this policy
+
+If SpeedDial Board's permissions or data handling change, this document will be updated accordingly.
+
+## Contact
+
+Questions or concerns: **omvs077@gmail.com**

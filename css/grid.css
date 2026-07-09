@@ -41,7 +41,7 @@
 }
 
 .dial-tile:hover .dial-icon {
-  box-shadow: 0 8px 20px color-mix(in srgb, CanvasText 35%, transparent), 0 0 0 1px color-mix(in srgb, GrayText 50%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, black 45%, transparent), 0 0 0 1px color-mix(in srgb, GrayText 50%, transparent);
 }
 
 .dial-tile.dragging {
@@ -77,7 +77,7 @@
   height: clamp(40px, calc(1000px / var(--grid-columns) - 38px), 60px);
   border-radius: 5px;
   background: color-mix(in srgb, CanvasText 7%, transparent);
-  box-shadow: 0 6px 16px color-mix(in srgb, CanvasText 30%, transparent);
+  box-shadow: 0 6px 16px color-mix(in srgb, black 40%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -130,5 +130,7 @@
     grid-template-columns: repeat(3, 1fr) !important;
   }
 }
+
+
 
 

@@ -36,8 +36,13 @@ const UIController = {
     const { dashboardPrefs } = await chrome.storage.local.get("dashboardPrefs");
     if (dashboardPrefs) this.prefs = { ...this.prefs, ...dashboardPrefs };
 
-    const { wallpaper } = await chrome.storage.local.get("wallpaper");
-    if (wallpaper) this._applyWallpaper(wallpaper);
+    const { wallpaper, wallpaperType } = await chrome.storage.local.get(["wallpaper", "wallpaperType"]);
+    if (wallpaperType === "video") {
+      const blob = await VideoStorage.getVideo();
+      if (blob) this._applyVideoWallpaper(blob);
+    } else if (wallpaper) {
+      this._applyWallpaper(wallpaper);
+    }
   },
 
   async _savePrefs() {
@@ -711,24 +716,55 @@ const UIController = {
   _pickWallpaper() {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = "image/*";
+    input.accept = "image/*,video/*";
     input.addEventListener("change", async () => {
       const file = input.files[0];
       if (!file) return;
-      const dataUrl = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-      await chrome.storage.local.set({ wallpaper: dataUrl });
-      this._applyWallpaper(dataUrl);
+      const videoExts = [".mp4", ".webm", ".ogg", ".ogv", ".mov", ".mkv", ".avi", ".wmv", ".flv", ".m4v", ".3gp"];
+      const isVideo = file.type.startsWith("video/") || videoExts.some((ext) => file.name.toLowerCase().endsWith(ext));
+
+      if (isVideo) {
+        const maxBytes = 100 * 1024 * 1024;
+        if (file.size > maxBytes) {
+          alert("Video is too large (" + Math.round(file.size / 1024 / 1024) + "MB). Max is 100MB.");
+          return;
+        }
+        await chrome.storage.local.remove("wallpaper");
+        await VideoStorage.setVideo(file);
+        await chrome.storage.local.set({ wallpaperType: "video" });
+        this._applyVideoWallpaper(file);
+      } else {
+        await VideoStorage.clearVideo();
+        const dataUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        await chrome.storage.local.set({ wallpaper: dataUrl, wallpaperType: "image" });
+        this._applyWallpaper(dataUrl);
+      }
     });
     input.click();
   },
 
+  _applyVideoWallpaper(fileOrBlob) {
+    const video = document.getElementById("wallpaper-video");
+    const url = URL.createObjectURL(fileOrBlob);
+    video.src = url;
+    video.classList.remove("hidden");
+    document.body.style.backgroundImage = "";
+    document.body.classList.add("has-wallpaper");
+    video.addEventListener("loadeddata", () => this._sampleDominantColorFromVideo(video), { once: true });
+  },
+
   async _clearWallpaper() {
-    await chrome.storage.local.remove("wallpaper");
+    await chrome.storage.local.remove(["wallpaper", "wallpaperType"]);
+    await VideoStorage.clearVideo();
+    const video = document.getElementById("wallpaper-video");
+    video.classList.add("hidden");
+    video.removeAttribute("src");
+    video.load();
     this._applyWallpaper(null);
   },
 
@@ -768,6 +804,24 @@ const UIController = {
     img.src = dataUrl;
   },
 
+  _sampleDominantColorFromVideo(video) {
+    const canvas = document.createElement("canvas");
+    const w = (canvas.width = 32);
+    const h = (canvas.height = 32);
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, w, h);
+    const data = ctx.getImageData(0, 0, w, h).data;
+    let r = 0, g = 0, b = 0, count = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      r += data[i]; g += data[i + 1]; b += data[i + 2]; count++;
+    }
+    r = Math.round(r / count); g = Math.round(g / count); b = Math.round(b / count);
+    document.documentElement.style.setProperty("--wallpaper-tint", r + ", " + g + ", " + b);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    document.documentElement.style.setProperty("--wallpaper-text", luminance > 0.55 ? "#1a1a1a" : "#f5f5f5");
+    document.documentElement.style.setProperty("--wallpaper-text-muted", luminance > 0.55 ? "#4a4a4a" : "#c9c9c9");
+  },
+
   async _setTimeFormat(fmt) {
     this.prefs.timeFormat = fmt;
     await this._savePrefs();
@@ -784,6 +838,14 @@ const UIController = {
     this._applyColumns();
   },
 };
+
+
+
+
+
+
+
+
 
 
 
