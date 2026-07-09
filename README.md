@@ -78,4 +78,4 @@ Crafted by **Dvvyom** | [GitHub](https://github.com/omvs077) |
 
 ## License
 
-[MIT](./LICENSE)'
+[MIT](./LICENSE)
